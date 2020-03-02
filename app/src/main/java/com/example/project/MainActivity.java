@@ -10,6 +10,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,9 +22,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void onClickPark(View view) {
-        Intent i = new Intent(this, ParkInfoActivity.class);
-        startActivity(i);
+    // create an action bar button
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.mymenu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // handle button activities
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch(id) {
+            case R.id.ProfileButton:
+                //something
+                break;
+            case R.id.ParksButton:
+                Intent i = new Intent(this, ParkInfoActivity.class);
+                startActivity(i);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

@@ -2,5 +2,7 @@
     <string name="app_name">Pawsitive Pals</string>
     <string name="SearchHint">Search</string>
     <string name="Location">Your current location</string>
+    <string name="ParksButton">Parks</string>
+    <string name="ProfileButton">Profile</string>
 
 </resources>

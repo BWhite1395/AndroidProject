@@ -4,5 +4,6 @@
     <string name="Location">Your current location</string>
     <string name="ParksButton">Parks</string>
     <string name="ProfileButton">Profile</string>
+    <string name="DogsButton">Dogs</string>
 
 </resources>

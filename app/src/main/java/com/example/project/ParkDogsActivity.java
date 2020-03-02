@@ -7,12 +7,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class DogPageActivity extends AppCompatActivity {
+public class ParkDogsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dog_page);
+        setContentView(R.layout.activity_park_dogs);
     }
 
     @Override
@@ -37,4 +37,5 @@ public class DogPageActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

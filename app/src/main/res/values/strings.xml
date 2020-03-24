@@ -3,4 +3,12 @@
     <string name="SearchHint">Search</string>
     <string name="Location">Your current location</string>
 
+    <string name="signin">Sign In</string>
+    <string name="signout">Sign Out</string>
+
+    <string name="create">Create Account</string>
+
+    <string name="email">Email</string>
+    <string name="pass">Password</string>
+
 </resources>

@@ -61,8 +61,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     ArrayList<DogPark> dogParkArrayList = new ArrayList<>();
 
-    private FirebaseAuth mAuth;
-    Button signButton;
+    FirebaseAuth mAuth;
+    MenuItem signButton;
+    Menu optionsMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,14 +72,27 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         Objects.requireNonNull(mapFragment).getMapAsync(this);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mAuth = FirebaseAuth.getInstance();
+        updateUI();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        mAuth = FirebaseAuth.getInstance();
-        signButton = findViewById(R.id.signButton);
-        updateUI();
+        optionsMenu = menu;
+
+        if (mAuth.getCurrentUser() == null) {
+            //signButton.setTitle("Sign In");
+            if(optionsMenu != null) {
+                optionsMenu.getItem(0).setTitle("Sign In");
+            }
+        } else{
+            //signButton.setTitle("Sign Out");
+            if(optionsMenu != null) {
+                optionsMenu.getItem(0).setTitle("Sign Out");
+            }
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -86,10 +100,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case R.id.ProfileButton:
-                //something
-                break;
+        if (id == R.id.ProfileButton) {
+            onClickSignIn();
         }
 
         return super.onOptionsItemSelected(item);
@@ -104,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onMarkerClick(Marker marker) {
                 DogPark park = (DogPark) marker.getTag();
                 Intent i = new Intent(MainActivity.this, ParkInfoActivity.class);
+                assert park != null;
                 i.putExtra("address", park.getAddress());
                 startActivity(i);
                 return false;
@@ -127,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             String jsonString;
             try {
                 jsonString = new BufferedReader(new InputStreamReader(getAssets().open("dog-off-leash-parks.json"))).readLine();
-                jsonString = "{\"dogParkList\":" + jsonString + "}";;
+                jsonString = "{\"dogParkList\":" + jsonString + "}";
                 Gson gson = new Gson();
                 DogParkList parksList = gson.fromJson(jsonString, DogParkList.class);
                 dogParkArrayList = parksList.getParks();
@@ -147,16 +160,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 }
             } catch (IOException e) {
+                e.printStackTrace();
             }
 
         }
     }
     public void updateUI() {
-        if (FirebaseAuth.getInstance().getCurrentUser() == null)
-        {
-            signButton.setText(R.string.signin);
-        }else{
-            signButton.setText(R.string.signout);
+        if (mAuth.getCurrentUser() == null) {
+            //signButton.setTitle("Sign In");
+            if(optionsMenu != null) {
+                optionsMenu.getItem(0).setTitle("Sign In");
+            }
+        } else{
+            //signButton.setTitle(R.string.signout);
+            if(optionsMenu != null) {
+                optionsMenu.getItem(0).setTitle("Sign Out");
+            }
         }
     }
 
@@ -223,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         updateUI();
     }
 
-    public void onClickSignIn(View view) {
+    public void onClickSignIn() {
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
             signOut();
         }else{
@@ -248,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 public void onClick(DialogInterface dialog, int which) {
                     final String email = newemail.getText().toString();
                     final String password = newpassword.getText().toString();
-                    if(email.trim() == "" || password.trim() == "") {
+                    if(email.trim().equals("") || password.trim().equals("")) {
                         Toast.makeText(MainActivity.this, "Sign In failed.",
                                 Toast.LENGTH_SHORT).show();
                     }else {

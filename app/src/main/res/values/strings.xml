@@ -6,5 +6,8 @@
     <string name="ParksButton">Parks</string>
     <string name="ProfileButton">Profile</string>
     <string name="DogsButton">Dogs</string>
+    <string name="park_name">Park Name</string>
+    <string name="dog_list">Dog List:</string>
+    <string name="park_placeholder">Park Placeholder</string>
 
 </resources>

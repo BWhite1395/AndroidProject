@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.common.util.IOUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,17 +19,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -65,10 +63,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.ProfileButton:
                 //something
                 break;
-            case R.id.ParksButton:
-                Intent i = new Intent(this, ParkInfoActivity.class);
-                startActivity(i);
-                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -78,6 +72,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon), 12));
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                DogPark park = (DogPark) marker.getTag();
+                Intent i = new Intent(MainActivity.this, ParkInfoActivity.class);
+                i.putExtra("address", park.getAddress());
+                startActivity(i);
+                return false;
+            }
+        });
 
         JsonHandle jh = new JsonHandle();
         jh.execute();
@@ -96,8 +100,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             String jsonString;
             try {
                 jsonString = new BufferedReader(new InputStreamReader(getAssets().open("dog-off-leash-parks.json"))).readLine();
-                jsonString = "{\"dogParkList\":" + jsonString + "}";
-                Log.d("SENDHELP",jsonString);
+                jsonString = "{\"dogParkList\":" + jsonString + "}";;
                 Gson gson = new Gson();
                 DogParkList parksList = gson.fromJson(jsonString, DogParkList.class);
                 dogParkArrayList = parksList.getParks();
@@ -106,15 +109,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         List<Address> address = new Geocoder(MainActivity.this).getFromLocationName(dp.getAddress(), 5);
                         assert address != null;
                         Address loc = address.get(0);
-                        mMap.addMarker(new MarkerOptions()
+                        Marker marker = mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(loc.getLatitude(), loc.getLongitude()))
+                                // change title to include number of dogs
                                 .title(dp.getAddress()));
+                        marker.setTag(dp);
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             } catch (IOException e) {
-                Log.d("SENDHELP","ERRORS");
             }
 
         }

@@ -29,10 +29,6 @@ public class DogPageActivity extends AppCompatActivity {
             case R.id.ProfileButton:
                 //something
                 break;
-            case R.id.ParksButton:
-                Intent i = new Intent(this, ParkInfoActivity.class);
-                startActivity(i);
-                break;
         }
 
         return super.onOptionsItemSelected(item);

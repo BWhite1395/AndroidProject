@@ -1,5 +1,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
     <item
@@ -7,8 +6,4 @@
         android:title="@string/ProfileButton">
     </item>
 
-    <item
-        android:id="@+id/ParksButton"
-        android:title="@string/ParksButton">
-    </item>
 </menu>

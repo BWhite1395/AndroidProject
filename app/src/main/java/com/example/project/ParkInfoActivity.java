@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 public class ParkInfoActivity extends AppCompatActivity {
 
@@ -14,6 +16,11 @@ public class ParkInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_park_info);
+
+        String parkAddress = getIntent().getExtras().getString("address");
+
+        TextView parkNameView = findViewById(R.id.parkNameView);
+        parkNameView.setText(parkAddress);
     }
 
     public void onClickDogs(View view) {
@@ -31,13 +38,8 @@ public class ParkInfoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch(id) {
-            case R.id.DogsButton:
-                startActivity(new Intent(this, ParkDogsActivity.class));
-                break;
-            case R.id.ParksButton:
-                // current page
-                break;
+        if (id == R.id.DogsButton) {
+            startActivity(new Intent(this, ParkDogsActivity.class));
         }
 
         return super.onOptionsItemSelected(item);

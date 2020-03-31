@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class ParkDogsActivity extends AppCompatActivity {
 
@@ -13,6 +15,8 @@ public class ParkDogsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_park_dogs);
+
+
     }
 
     @Override
@@ -28,10 +32,6 @@ public class ParkDogsActivity extends AppCompatActivity {
         switch(id) {
             case R.id.ProfileButton:
                 //something
-                break;
-            case R.id.ParksButton:
-                Intent i = new Intent(this, ParkInfoActivity.class);
-                startActivity(i);
                 break;
         }
 

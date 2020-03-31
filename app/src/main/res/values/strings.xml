@@ -10,4 +10,12 @@
     <string name="dog_list">Dog List:</string>
     <string name="park_placeholder">Park Placeholder</string>
 
+    <string name="signin">Sign In</string>
+    <string name="signout">Sign Out</string>
+
+    <string name="create">Create Account</string>
+
+    <string name="email">Email</string>
+    <string name="pass">Password</string>
+
 </resources>

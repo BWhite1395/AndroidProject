@@ -13,8 +13,6 @@
         android:layout_height="match_parent"
         android:elevation="-20dp"
         tools:context=".MainActivity">
-
-
     </androidx.fragment.app.FragmentContainerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

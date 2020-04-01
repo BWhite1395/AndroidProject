@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 public class ParkInfoActivity extends AppCompatActivity {
 
     Menu optionsMenu;
@@ -19,7 +21,7 @@ public class ParkInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_park_info);
 
-        String parkAddress = getIntent().getExtras().getString("address");
+        String parkAddress = Objects.requireNonNull(getIntent().getExtras()).getString("address");
 
         TextView parkNameView = findViewById(R.id.parkNameView);
         parkNameView.setText(parkAddress);
@@ -38,7 +40,7 @@ public class ParkInfoActivity extends AppCompatActivity {
         } else{
             //signButton.setTitle("Sign Out");
             if(optionsMenu != null) {
-                optionsMenu.getItem(0).setTitle("Sign Out");
+                optionsMenu.getItem(0).setTitle("Profile");
             }
         }
         return super.onCreateOptionsMenu(menu);

@@ -18,10 +18,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 class Authentication {
 
     static FirebaseAuth mAuth;
+    private static DatabaseReference ref;
+    static FirebaseUser user;
+    //public static ArrayList<Profile> profiles = new ArrayList<>();
+
     @SuppressLint("StaticFieldLeak")
     private static Context context;
     private static Menu optionsMenu;
@@ -41,7 +49,7 @@ class Authentication {
     private static String email;
     private static String password;
 
-    private static void createAccount(String email, String password) {
+    private static void createAccount(final String email, String password) {
         Authentication.email = email;
         Authentication.password = password;
         if (!email.equals("") && !password.equals("")) {
@@ -50,7 +58,12 @@ class Authentication {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        FirebaseUser user = mAuth.getCurrentUser();
+                        user = mAuth.getCurrentUser();
+                        ref = FirebaseDatabase.getInstance().getReference();
+                        assert user != null;
+                        Profile p = new Profile(user.getUid(), email);
+                        ref.child("users").child(user.getUid()).setValue(p);
+                        //profiles.add(p);
                         signIn(Authentication.email, Authentication.password);
                         Authentication.email = null;
                         Authentication.password = null;
@@ -92,7 +105,7 @@ class Authentication {
         // [END sign_in_with_email]
     }
 
-    private static void signOut() {
+    static void signOut() {
         mAuth.signOut();
         updateUI(optionsMenu);
     }

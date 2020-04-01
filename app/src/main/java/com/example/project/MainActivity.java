@@ -80,14 +80,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         optionsMenu = menu;
 
         if (Authentication.mAuth.getCurrentUser() == null) {
-            //signButton.setTitle("Sign In");
             if(optionsMenu != null) {
                 optionsMenu.getItem(0).setTitle("Sign In");
             }
         } else{
-            //signButton.setTitle("Sign Out");
             if(optionsMenu != null) {
-                optionsMenu.getItem(0).setTitle("Sign Out");
+                optionsMenu.getItem(0).setTitle("Profile");
+                Authentication.user = Authentication.mAuth.getCurrentUser();
             }
         }
 

@@ -1,9 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ParkDogsActivity">
+    android:orientation="vertical"
+    android:focusableInTouchMode="true"
+    tools:context=".ProfileActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:padding="10dp"
+        android:focusable="true"
+        android:text="@string/user"
+        android:inputType="text"
+        tools:ignore="LabelFor"
+        android:importantForAutofill="no" />
+
+    <Button
+        android:id="@+id/add_dog_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_dog" />
+
+    <Button
+        android:id="@+id/signout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="@string/signout" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="520dp" />
+
+
+
+
+</LinearLayout>

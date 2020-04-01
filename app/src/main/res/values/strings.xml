@@ -17,5 +17,8 @@
 
     <string name="email">Email</string>
     <string name="pass">Password</string>
+    <string name="add_dog">Add Dog</string>
+    <string name="profile">Profile</string>
+    <string name="user">User</string>
 
 </resources>

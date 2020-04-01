@@ -61,8 +61,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     ArrayList<DogPark> dogParkArrayList = new ArrayList<>();
 
-    FirebaseAuth mAuth;
-    MenuItem signButton;
+
     Menu optionsMenu;
 
     @Override
@@ -72,8 +71,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         Objects.requireNonNull(mapFragment).getMapAsync(this);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        mAuth = FirebaseAuth.getInstance();
-        updateUI();
+        Authentication.mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -81,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         getMenuInflater().inflate(R.menu.menu_main, menu);
         optionsMenu = menu;
 
-        if (mAuth.getCurrentUser() == null) {
+        if (Authentication.mAuth.getCurrentUser() == null) {
             //signButton.setTitle("Sign In");
             if(optionsMenu != null) {
                 optionsMenu.getItem(0).setTitle("Sign In");
@@ -101,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         int id = item.getItemId();
 
         if (id == R.id.ProfileButton) {
-            onClickSignIn();
+            Authentication.onClickSignIn(MainActivity.this, optionsMenu);
         }
 
         return super.onOptionsItemSelected(item);
@@ -165,137 +163,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
     }
-    public void updateUI() {
-        if (mAuth.getCurrentUser() == null) {
-            //signButton.setTitle("Sign In");
-            if(optionsMenu != null) {
-                optionsMenu.getItem(0).setTitle("Sign In");
-            }
-        } else{
-            //signButton.setTitle(R.string.signout);
-            if(optionsMenu != null) {
-                optionsMenu.getItem(0).setTitle("Sign Out");
-            }
-        }
-    }
+
 
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI();
+        FirebaseUser currentUser = Authentication.mAuth.getCurrentUser();
+        Authentication.updateUI(optionsMenu);
     }
 
-    private void createAccount(String email, String password) {
-        // [START create_user_with_email]
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
 
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
-
-                        // [START_EXCLUDE]
-                        // [END_EXCLUDE]
-                    }
-                });
-        // [END create_user_with_email]
-    }
-
-    private void signIn(String email, String password) {
-
-
-        // [START sign_in_with_email]
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
-
-
-                    }
-                });
-        // [END sign_in_with_email]
-    }
-
-    private void signOut() {
-        mAuth.signOut();
-        updateUI();
-    }
-
-    public void onClickSignIn() {
-        if(FirebaseAuth.getInstance().getCurrentUser() != null){
-            signOut();
-        }else{
-            Context context = this;
-            LinearLayout layout = new LinearLayout(context);
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.signin);
-            layout.setOrientation(LinearLayout.VERTICAL);
-            final EditText newemail = new EditText(this);
-            newemail.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-            newemail.setHint(R.string.email);
-            final EditText newpassword = new EditText(this);
-            newpassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            newpassword.setHint(R.string.pass);
-
-            layout.addView(newemail);
-            layout.addView(newpassword);
-            builder.setView(layout);
-
-            builder.setPositiveButton("Sign In", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    final String email = newemail.getText().toString();
-                    final String password = newpassword.getText().toString();
-                    if(email.trim().equals("") || password.trim().equals("")) {
-                        Toast.makeText(MainActivity.this, "Sign In failed.",
-                                Toast.LENGTH_SHORT).show();
-                    }else {
-                        signIn(email, password);
-
-                    }
-                }
-            });
-            builder.setNeutralButton("Create Account", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    final String email = newemail.getText().toString();
-                    final String password = newpassword.getText().toString();
-                    createAccount(email, password);
-                    updateUI();
-                    dialog.cancel();
-                }
-            });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            builder.show();
-        }
-
-    }
 }
 
 

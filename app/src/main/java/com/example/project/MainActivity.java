@@ -42,6 +42,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -159,6 +164,28 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+//            FirebaseDatabase.getInstance().getReference().child("parks").addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    for  (DogPark dp : dogParkArrayList) {
+//                        FirebaseDatabase.getInstance().getReference().child("parks").child(dp.getAddress()).setValue(null);
+//                        FirebaseDatabase.getInstance().getReference().child("parks").child(dp.getAddress()).child("dog_list").setValue(null);
+//                        for (DataSnapshot s : dataSnapshot.getChildren()) {
+//                            if (!s.child(dp.getAddress()).exists()) {
+//                                // if the park is not in the database, add it
+//                                FirebaseDatabase.getInstance().getReference().child("parks").child(dp.getAddress()).setValue("null");
+//                                FirebaseDatabase.getInstance().getReference().child("parks").child(dp.getAddress()).child("dog_list").setValue("null");
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                }
+//            });
 
         }
     }

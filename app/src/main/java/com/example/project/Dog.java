@@ -11,8 +11,16 @@ public class Dog {
         this.name = name;
         this.owner = owner;
         this.breed = breed;
-        this.info = info;
-        this.image_url = image_url;
+        if (info.equals("")) {
+            this.info = null;
+        } else {
+            this.info = info;
+        }
+        if (image_url.equals("")) {
+            this.image_url = null;
+        } else {
+            this.image_url = image_url;
+        }
     }
 
     public String getName() {

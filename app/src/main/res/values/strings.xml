@@ -20,5 +20,12 @@
     <string name="add_dog">Add Dog</string>
     <string name="profile">Profile</string>
     <string name="user">User</string>
+    <string name="image_url">Image Url</string>
+    <string name="description">Description</string>
+    <string name="owner">Owner</string>
+    <string name="breed">Breed</string>
+    <string name="name">Name</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

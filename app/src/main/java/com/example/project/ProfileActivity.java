@@ -3,6 +3,7 @@ package com.example.project;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,8 +11,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,11 +24,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
-
-    private FirebaseUser user;
     EditText usernametv;
 
     @Override
@@ -35,13 +37,21 @@ public class ProfileActivity extends AppCompatActivity {
         usernametv = findViewById(R.id.username);
         loadinfo();
 
-        Button button = findViewById(R.id.signout);
-        button.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.signout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Authentication.signOut();
                 Toast.makeText(ProfileActivity.this, "Signed Out", Toast.LENGTH_SHORT).show();
                 finish();
+            }
+        });
+
+        findViewById(R.id.add_dog_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ProfileActivity.this, AddDogActivity.class);
+                i.putExtra("owner", Authentication.user.getUid());
+                startActivity(i);
             }
         });
 
@@ -53,6 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Authentication.user = Authentication.mAuth.getCurrentUser();
                 FirebaseDatabase.getInstance().getReference().child("users").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -78,14 +89,17 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     void loadinfo() {
+        // get username
         FirebaseDatabase.getInstance().getReference().child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Authentication.user = Authentication.mAuth.getCurrentUser();
                 for (DataSnapshot s : dataSnapshot.getChildren()) {
                     if(Authentication.user.getUid().equals(Objects.requireNonNull(s.child("uuid").getValue()).toString())) {
                         usernametv.setText(Objects.requireNonNull(s.child("username").getValue()).toString());
                     }
                 }
+
             }
 
             @Override
@@ -93,6 +107,37 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
+
+        // get dogs
+        FirebaseDatabase.getInstance().getReference().child("users").child(Authentication.user.getUid()).child("dog_list").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                Authentication.dogs = new ArrayList<>();
+                for (DataSnapshot s : dataSnapshot.getChildren()) {
+                    Log.d("SENDHELP", "onDataChange: " + s.child("name").getValue().toString());
+                    Authentication.dogs.add(new Dog(Objects.requireNonNull(s.child("name").getValue()).toString(),
+                            Objects.requireNonNull(s.child("owner").getValue()).toString(),
+                            Objects.requireNonNull(s.child("breed").getValue()).toString(),
+                            Objects.requireNonNull(s.child("info").getValue()).toString(),
+                            Objects.requireNonNull(s.child("image_url").getValue()).toString()));
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        ListView lv = findViewById(R.id.dogListView);
+        lv.setAdapter(new ArrayAdapter<>(
+                this, R.layout.dog_list_item,
+                Authentication.dogs
+        ));
+
     }
 
 }

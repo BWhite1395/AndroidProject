@@ -24,6 +24,7 @@
         </activity>
         <activity android:name=".ParkDogsActivity" />
         <activity android:name=".ProfileActivity" />
+        <activity android:name=".AddDogActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

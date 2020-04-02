@@ -28,11 +28,12 @@ class Authentication {
     static FirebaseAuth mAuth;
     private static DatabaseReference ref;
     static FirebaseUser user;
-    //public static ArrayList<Profile> profiles = new ArrayList<>();
 
     @SuppressLint("StaticFieldLeak")
     private static Context context;
     private static Menu optionsMenu;
+
+    static ArrayList<Dog> dogs = new ArrayList<>();
 
     static void updateUI(Menu optionsMenu) {
         if (mAuth.getCurrentUser() == null) {
@@ -63,7 +64,6 @@ class Authentication {
                         assert user != null;
                         Profile p = new Profile(user.getUid(), email);
                         ref.child("users").child(user.getUid()).setValue(p);
-                        //profiles.add(p);
                         signIn(Authentication.email, Authentication.password);
                         Authentication.email = null;
                         Authentication.password = null;

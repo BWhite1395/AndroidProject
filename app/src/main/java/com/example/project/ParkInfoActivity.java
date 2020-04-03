@@ -10,27 +10,37 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 public class ParkInfoActivity extends AppCompatActivity {
+
+    Menu optionsMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_park_info);
 
-        String parkAddress = getIntent().getExtras().getString("address");
+        String parkAddress = Objects.requireNonNull(getIntent().getExtras()).getString("address");
 
         TextView parkNameView = findViewById(R.id.parkNameView);
         parkNameView.setText(parkAddress);
     }
 
-    public void onClickDogs(View view) {
-        Intent i = new Intent(this, DogPageActivity.class);
-        startActivity(i);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_park_info, menu);
+        optionsMenu = menu;
+
+        if (Authentication.mAuth.getCurrentUser() == null) {
+            if(optionsMenu != null) {
+                optionsMenu.getItem(0).setTitle("Sign In");
+            }
+        } else{
+            if(optionsMenu != null) {
+                optionsMenu.getItem(0).setTitle("Profile");
+            }
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -38,8 +48,8 @@ public class ParkInfoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.DogsButton) {
-            startActivity(new Intent(this, ParkDogsActivity.class));
+        if (id == R.id.ProfileButton) {
+            Authentication.onClickSignIn(ParkInfoActivity.this, optionsMenu);
         }
 
         return super.onOptionsItemSelected(item);

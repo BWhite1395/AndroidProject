@@ -23,6 +23,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".ParkDogsActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".AddDogActivity" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBFDfp2Jx9o25JUmw5vBMQbAJVDm4ECC08"/>

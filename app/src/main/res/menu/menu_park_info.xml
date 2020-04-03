@@ -4,9 +4,4 @@
         android:id="@+id/ProfileButton"
         android:title="@string/ProfileButton">
     </item>
-
-    <item
-        android:id="@+id/DogsButton"
-        android:title="@string/DogsButton">
-    </item>
 </menu>

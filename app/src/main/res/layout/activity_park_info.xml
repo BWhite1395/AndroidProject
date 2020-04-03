@@ -16,7 +16,7 @@
         android:textAlignment="center"
         android:paddingTop="5dp"
         android:text="@string/park_name"
-        android:textSize="25sp" />
+        android:textSize="22sp" />
 
     <TextView
         android:id="@+id/parkInfoView"

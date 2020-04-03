@@ -29,6 +29,7 @@ import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
     EditText usernametv;
+    ListView lv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
                         for (DataSnapshot s : dataSnapshot.getChildren()) {
                             if(Authentication.user.getUid().equals(Objects.requireNonNull(s.child("uuid").getValue()).toString())) {
                                 s.child("username").getRef().setValue(usernametv.getText().toString());
-                                return;
+                                break;
                             }
                         }
                     }
@@ -115,7 +116,6 @@ public class ProfileActivity extends AppCompatActivity {
 
                 Authentication.dogs = new ArrayList<>();
                 for (DataSnapshot s : dataSnapshot.getChildren()) {
-                    Log.d("SENDHELP", "onDataChange: " + s.child("name").getValue().toString());
                     Authentication.dogs.add(new Dog(Objects.requireNonNull(s.child("name").getValue()).toString(),
                             Objects.requireNonNull(s.child("owner").getValue()).toString(),
                             Objects.requireNonNull(s.child("breed").getValue()).toString(),
@@ -123,6 +123,8 @@ public class ProfileActivity extends AppCompatActivity {
                             Objects.requireNonNull(s.child("image_url").getValue()).toString()));
                 }
 
+                lv = findViewById(R.id.dogListView);
+                lv.setAdapter(new DogAdapter(ProfileActivity.this, Authentication.dogs));
 
             }
 
@@ -132,11 +134,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        ListView lv = findViewById(R.id.dogListView);
-        lv.setAdapter(new ArrayAdapter<>(
-                this, R.layout.dog_list_item,
-                Authentication.dogs
-        ));
 
     }
 

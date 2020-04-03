@@ -23,6 +23,8 @@ public class Dog {
         }
     }
 
+    public Dog(){}
+
     public String getName() {
         return name;
     }

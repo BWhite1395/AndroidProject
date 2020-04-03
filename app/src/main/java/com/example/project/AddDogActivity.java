@@ -2,6 +2,7 @@ package com.example.project;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -42,15 +43,32 @@ public class AddDogActivity extends AppCompatActivity {
                 name = dogName.getText().toString();
                 breed = dogBreed.getText().toString();
                 info = dogInfo.getText().toString();
-                image = "No Image";
-                owner = "Guest";
+                image = dogImage.getText().toString();
 
-                FirebaseDatabase.getInstance().getReference().child("users").child(Authentication.user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                FirebaseDatabase.getInstance().getReference().child("users").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot s : dataSnapshot.getChildren()) {
                             if(Authentication.user.getUid().equals(uuid)) {
                                 owner = Objects.requireNonNull(s.child("username").getValue()).toString();
+                                if (info.equals("")) {
+                                    info = "No Info";
+                                }
+
+                                if(image.equals("")) {
+                                    image = "No Image";
+                                }
+
+                                if (!name.equals("") && !breed.equals("")) {
+                                    FirebaseDatabase.getInstance().getReference().child("users").child(uuid).child("dog_list").child(name)
+                                            .setValue(new Dog(name, owner, breed, info, image));
+                                    Toast.makeText(AddDogActivity.this, "Dog Added", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                    startActivity(new Intent(AddDogActivity.this, ProfileActivity.class));
+                                } else {
+                                    Toast.makeText(AddDogActivity.this, "Invalid Inputs", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
                                 break;
                             }
                         }
@@ -61,20 +79,7 @@ public class AddDogActivity extends AppCompatActivity {
                     }
                 });
 
-                if (info.equals("")) {
-                    info = "No Info";
-                }
 
-                if (!name.equals("") && !breed.equals("")) {
-                    FirebaseDatabase.getInstance().getReference().child("users").child(uuid).child("dog_list")
-                            .setValue(new Dog(name, owner, breed, info, image));
-                    Toast.makeText(AddDogActivity.this, "Dog Added", Toast.LENGTH_SHORT).show();
-                    finish();
-                    startActivity(new Intent(AddDogActivity.this, ProfileActivity.class));
-                } else {
-                    Toast.makeText(AddDogActivity.this, "Invalid Inputs", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
             }
         });
 

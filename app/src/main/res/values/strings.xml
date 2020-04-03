@@ -27,5 +27,6 @@
     <string name="name">Name</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="dog_image">Dog Image</string>
 
 </resources>

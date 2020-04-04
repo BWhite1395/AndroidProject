@@ -6,10 +6,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
 class DogPark {
+    /**
+        Object for holding dog park information from database.
+     */
 
     @PropertyName("datasetid")
     @SerializedName("datasetid")
@@ -46,16 +46,8 @@ class DogPark {
     @Expose
     private com.google.gson.JsonObject fields;
 
-//    private ArrayList<Dog> dogList = new ArrayList<>();
-//
-//    public int getDogListSize() {return dogList.size();}
-//
-//    public ArrayList getDogList() {return dogList;}
-//
-//    public void addDog(Dog d) {dogList.add(d);}
-
     @PropertyName("fields")
-    public JsonObject getFields() {
+    private JsonObject getFields() {
         return fields;
     }
 
@@ -75,7 +67,7 @@ class DogPark {
     }
 
     @PropertyName("address")
-    public String getAddress() {
+    String getAddress() {
         return this.getFields().get("address").getAsString();
     }
 

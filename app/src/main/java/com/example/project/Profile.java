@@ -3,6 +3,9 @@ package com.example.project;
 import java.util.ArrayList;
 
 public class Profile {
+    /**
+     * Object that stores user profile information.
+     */
 
     private String email;
     private ArrayList<Dog> dogs = new ArrayList<>();

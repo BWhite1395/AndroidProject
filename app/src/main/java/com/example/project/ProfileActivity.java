@@ -29,6 +29,10 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
+    /**
+     * View the user profile, add dogs, or sign out.
+     */
+
     EditText usernametv;
     ListView lv;
 

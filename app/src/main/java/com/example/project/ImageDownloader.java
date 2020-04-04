@@ -12,6 +12,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
+    /**
+     * Download image from a URL.
+     */
 
     private final WeakReference<ImageView> imageViewReference;
 
@@ -30,6 +33,7 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
             bitmap = null;
         }
 
+        // Set the imageview to a placeholder image.
         ImageView imageView = imageViewReference.get();
         if (imageView != null) {
             if (bitmap != null) {
@@ -42,6 +46,7 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
     }
 
     private Bitmap downloadBitmap(String url) {
+        // Download from the URL.
         HttpURLConnection urlConnection = null;
         try {
             URL uri = new URL(url);

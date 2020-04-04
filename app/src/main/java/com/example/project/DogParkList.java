@@ -6,11 +6,15 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 class DogParkList {
+    /**
+     *  Arraylist of dog parks.
+     */
+
     @SerializedName("dogParkList")
     @Expose
     private ArrayList<DogPark> dogParkList = new ArrayList<>();
 
-    public ArrayList<DogPark> getParks() {
+    ArrayList<DogPark> getParks() {
         return dogParkList;
     }
 }

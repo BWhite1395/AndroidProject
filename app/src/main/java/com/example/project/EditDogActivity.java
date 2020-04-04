@@ -20,9 +20,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Objects;
 
 public class EditDogActivity extends AppCompatActivity {
+    /**
+     * Edit a user's dog information.
+     */
+
     EditText dogBreed, dogInfo, dogImage;
 
-    String name, owner, breed, info, image, uuid;
+    String name, breed, info, image, uuid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,19 +66,17 @@ public class EditDogActivity extends AppCompatActivity {
 
                         for (DataSnapshot s : dataSnapshot.getChildren()) {
 
-                            // get the right dog from the database
+                            // get the right dog from the database and update it's info
                             if(Objects.requireNonNull(s.child("name").getValue()).toString().equals(getIntent().getStringExtra("name"))
                                 && Objects.requireNonNull(s.child("breed").getValue()).toString().equals(getIntent().getStringExtra("breed"))
                                 && Objects.requireNonNull(s.child("info").getValue()).toString().equals(getIntent().getStringExtra("info"))
                                 && Objects.requireNonNull(s.child("image_url").getValue()).toString().equals(getIntent().getStringExtra("image"))) {
 
-
-
                                 if (!name.equals("") && !breed.equals("")) {
                                     DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("users").child(uuid).child("dog_list").child(name);
                                     df.child("breed").setValue(breed);
                                     df.child("info").setValue(info);
-                                    df.child("image").setValue(image);
+                                    df.child("image_url").setValue(image);
                                     Toast.makeText(EditDogActivity.this, "Edited Successfully", Toast.LENGTH_SHORT).show();
                                     finish();
                                     startActivity(new Intent(EditDogActivity.this, ProfileActivity.class));
@@ -111,7 +113,7 @@ public class EditDogActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot s : dataSnapshot.getChildren()) {
 
-                            // get the right dog from the database
+                            // get the right dog from the database and delete it
                             if(Objects.requireNonNull(s.child("name").getValue()).toString().equals(getIntent().getStringExtra("name"))
                                     && Objects.requireNonNull(s.child("breed").getValue()).toString().equals(getIntent().getStringExtra("breed"))
                                     && Objects.requireNonNull(s.child("info").getValue()).toString().equals(getIntent().getStringExtra("info"))

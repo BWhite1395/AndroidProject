@@ -18,6 +18,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Objects;
 
 public class AddDogActivity extends AppCompatActivity {
+    /**
+     * User fills  in the prompts and adds a new dog to their profile.
+     */
     EditText dogName, dogBreed, dogInfo, dogImage;
 
     String uuid;
@@ -37,6 +40,7 @@ public class AddDogActivity extends AppCompatActivity {
         dogInfo = findViewById(R.id.infoText);
         dogImage = findViewById(R.id.imageText);
 
+        // User confirms adding a new dog.
         findViewById(R.id.confirm_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,6 +55,8 @@ public class AddDogActivity extends AppCompatActivity {
                         for (DataSnapshot s : dataSnapshot.getChildren()) {
                             if(Authentication.user.getUid().equals(uuid)) {
                                 owner = Objects.requireNonNull(s.child("username").getValue()).toString();
+
+                                // Assigns null values
                                 if (info.equals("")) {
                                     info = "No Info";
                                 }
@@ -59,15 +65,16 @@ public class AddDogActivity extends AppCompatActivity {
                                     image = "No Image";
                                 }
 
+                                // Check input is valid before submitting.
                                 if (!name.equals("") && !breed.equals("")) {
                                     FirebaseDatabase.getInstance().getReference().child("users").child(uuid).child("dog_list").child(name)
                                             .setValue(new Dog(name, owner, breed, info, image));
                                     Toast.makeText(AddDogActivity.this, "Dog Added", Toast.LENGTH_SHORT).show();
+                                    Intent i = new Intent(AddDogActivity.this, ProfileActivity.class);
+                                    startActivity(i);
                                     finish();
-                                    startActivity(new Intent(AddDogActivity.this, ProfileActivity.class));
                                 } else {
                                     Toast.makeText(AddDogActivity.this, "Invalid Inputs", Toast.LENGTH_SHORT).show();
-                                    finish();
                                 }
                                 break;
                             }

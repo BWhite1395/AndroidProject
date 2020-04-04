@@ -1,6 +1,10 @@
 package com.example.project;
 
 public class Dog {
+    /**
+     * Class for holding dog information.
+     */
+
     private String name;
     private String owner;
     private String breed;
@@ -11,6 +15,8 @@ public class Dog {
         this.name = name;
         this.owner = owner;
         this.breed = breed;
+
+        // Set to null if string is empty.
         if (info.equals("")) {
             this.info = null;
         } else {
@@ -33,12 +39,8 @@ public class Dog {
         this.name = name;
     }
 
-    public String getOwner() {
+    String getOwner() {
         return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
     }
 
     public String getBreed() {
@@ -49,19 +51,11 @@ public class Dog {
         this.breed = breed;
     }
 
-    public String getInfo() {
+    String getInfo() {
         return info;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
-    }
-
-    public String getImage_url() {
+    String getImage_url() {
         return image_url;
-    }
-
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
     }
 }

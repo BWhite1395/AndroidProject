@@ -35,6 +35,7 @@ class Authentication {
 
     static ArrayList<Dog> dogs = new ArrayList<>();
 
+    // Updates the menu.
     static void updateUI(Menu optionsMenu) {
         if (mAuth.getCurrentUser() == null) {
             if(optionsMenu != null) {
@@ -58,6 +59,7 @@ class Authentication {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
+
                         // Sign in success, update UI with the signed-in user's information
                         user = mAuth.getCurrentUser();
                         ref = FirebaseDatabase.getInstance().getReference();
@@ -65,29 +67,27 @@ class Authentication {
                         Profile p = new Profile(user.getUid(), email);
                         ref.child("users").child(user.getUid()).setValue(p);
                         signIn(Authentication.email, Authentication.password);
+
                         Authentication.email = null;
                         Authentication.password = null;
                     } else {
                         Toast.makeText(context, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         updateUI(optionsMenu);
                     }
-                    // [START_EXCLUDE]
-                    // [END_EXCLUDE]
                 }
             });
-            // [END create_user_with_email]
         } else {
             Toast.makeText(context, "Authentication failed.", Toast.LENGTH_SHORT).show();
         }
     }
 
     private static void signIn(String email, String password) {
-        // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(context, "Successfully Logged In",
@@ -95,18 +95,18 @@ class Authentication {
                             updateUI(optionsMenu);
 
                         } else {
-                            // If sign in fails, display a message to the user.
+                            // Sign in fails, display a message.
                             Toast.makeText(context, "Authentication Failed",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(optionsMenu);
                         }
                     }
                 });
-        // [END sign_in_with_email]
     }
 
     static void signOut() {
         mAuth.signOut();
+        dogs.clear();
         updateUI(optionsMenu);
     }
 
@@ -114,11 +114,11 @@ class Authentication {
         Authentication.context = c;
         Authentication.optionsMenu = m;
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
-            //Authentication.signOut();
             Intent i = new Intent(context, ProfileActivity.class);
             context.startActivity(i);
 
         }else{
+            // Set up login dialog box.
             LinearLayout layout = new LinearLayout(context);
             final AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle(R.string.signin);
@@ -134,6 +134,7 @@ class Authentication {
             layout.addView(newpassword);
             builder.setView(layout);
 
+            // Build the dialog box.
             builder.setPositiveButton("Sign In", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

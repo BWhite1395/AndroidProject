@@ -63,8 +63,9 @@ public class AddDogActivity extends AppCompatActivity {
                                     FirebaseDatabase.getInstance().getReference().child("users").child(uuid).child("dog_list").child(name)
                                             .setValue(new Dog(name, owner, breed, info, image));
                                     Toast.makeText(AddDogActivity.this, "Dog Added", Toast.LENGTH_SHORT).show();
+                                    Intent i = new Intent(AddDogActivity.this, ProfileActivity.class);
+                                    startActivity(i);
                                     finish();
-                                    startActivity(new Intent(AddDogActivity.this, ProfileActivity.class));
                                 } else {
                                     Toast.makeText(AddDogActivity.this, "Invalid Inputs", Toast.LENGTH_SHORT).show();
                                     finish();

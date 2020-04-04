@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,6 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
         usernametv = findViewById(R.id.username);
         loadinfo();
 
@@ -53,6 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Intent i = new Intent(ProfileActivity.this, AddDogActivity.class);
                 i.putExtra("owner", Authentication.user.getUid());
                 startActivity(i);
+                finish();
             }
         });
 
@@ -72,6 +75,21 @@ public class ProfileActivity extends AppCompatActivity {
                             if(Authentication.user.getUid().equals(Objects.requireNonNull(s.child("uuid").getValue()).toString())) {
                                 s.child("username").getRef().setValue(usernametv.getText().toString());
                                 break;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+
+                FirebaseDatabase.getInstance().getReference().child("users").child(Authentication.user.getUid()).child("dog_list").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot s : dataSnapshot.getChildren()) {
+                            if(!Objects.requireNonNull(s.child("owner").getValue()).toString().equals(usernametv.getText().toString())) {
+                                s.child("owner").getRef().setValue(usernametv.getText().toString());
                             }
                         }
                     }
@@ -124,6 +142,20 @@ public class ProfileActivity extends AppCompatActivity {
                 }
 
                 lv = findViewById(R.id.dogListView);
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() { // dog clicked
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent i = new Intent(ProfileActivity.this, EditDogActivity.class);
+                        Dog currDog = (Dog) parent.getItemAtPosition(position);
+                        i.putExtra("name", currDog.getName());
+                        i.putExtra("breed", currDog.getBreed());
+                        i.putExtra("info", currDog.getInfo());
+                        i.putExtra("image", currDog.getImage_url());
+                        i.putExtra("uuid", Authentication.user.getUid());
+                        startActivity(i);
+                        finish();
+                    }
+                });
                 lv.setAdapter(new DogAdapter(ProfileActivity.this, Authentication.dogs));
 
             }

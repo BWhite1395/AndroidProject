@@ -39,13 +39,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="-35dp"
-        android:layout_marginStart="90dp"/>
+        android:layout_marginStart="90dp"
+        android:layout_marginEnd="10dp"/>
 
     <TextView
         android:id="@+id/ownerItemView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="90dp"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp" />
 
 </LinearLayout>

@@ -64,7 +64,7 @@ public class DogListActivity extends AppCompatActivity {
                                             && Objects.requireNonNull(s.child("info").getValue()).toString().equals(currdog.getInfo())
                                             && Objects.requireNonNull(s.child("image_url").getValue()).toString().equals(currdog.getImage_url())
                                             && Objects.requireNonNull(s.child("owner").getValue()).toString().equals(currdog.getOwner())) {
-                                        Toast.makeText(DogListActivity.this, "Dog Lready Added!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(DogListActivity.this, "Dog Already Added!", Toast.LENGTH_SHORT).show();
                                         return;
                                     }
                                 }

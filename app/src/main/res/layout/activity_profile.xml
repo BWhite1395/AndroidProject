@@ -15,9 +15,9 @@
         android:textAlignment="center"
         android:padding="10dp"
         android:focusable="true"
-        android:inputType="text"
+        android:inputType="textNoSuggestions"
         tools:ignore="LabelFor"
-        android:importantForAutofill="no" />
+        android:importantForAutofill="no"/>
 
     <Button
         android:id="@+id/add_dog_button"

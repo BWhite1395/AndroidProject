@@ -134,7 +134,7 @@ class Authentication {
             layout.addView(newpassword);
             builder.setView(layout);
 
-            // Build the dialog box.
+            // Build the dialog box buttons.
             builder.setPositiveButton("Sign In", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

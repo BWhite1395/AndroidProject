@@ -52,42 +52,47 @@ public class EditDogActivity extends AppCompatActivity {
         findViewById(R.id.confirm_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseDatabase.getInstance().getReference().child("users").child(uuid).child("dog_list").addListenerForSingleValueEvent(new ValueEventListener() {
+                FirebaseDatabase.getInstance().getReference().child("users").child(uuid).child("dog_list")
+                        .child(Objects.requireNonNull(getIntent().getStringExtra("name")))
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        DataSnapshot s = dataSnapshot;
                         name = getIntent().getStringExtra("name");
                         breed = dogBreed.getText().toString();
                         info = dogInfo.getText().toString();
                         image = dogImage.getText().toString();
 
-                        if (info == null) {
+                        // assigns default values
+                        if (info.equals("")) {
                             info = "No Info";
                         }
 
-                        for (DataSnapshot s : dataSnapshot.getChildren()) {
+                        if (image.equals("")) {
+                            image = "No Image";
+                        }
 
-                            // get the right dog from the database and update it's info
-                            if(Objects.requireNonNull(s.child("name").getValue()).toString().equals(getIntent().getStringExtra("name"))
-                                && Objects.requireNonNull(s.child("breed").getValue()).toString().equals(getIntent().getStringExtra("breed"))
-                                && Objects.requireNonNull(s.child("info").getValue()).toString().equals(getIntent().getStringExtra("info"))
-                                && Objects.requireNonNull(s.child("image_url").getValue()).toString().equals(getIntent().getStringExtra("image"))) {
+                        // get the right dog from the database and update it's info
+                        if(Objects.requireNonNull(s.child("name").getValue()).toString().equals(getIntent().getStringExtra("name"))
+                            && Objects.requireNonNull(s.child("breed").getValue()).toString().equals(getIntent().getStringExtra("breed"))
+                            && Objects.requireNonNull(s.child("info").getValue()).toString().equals(getIntent().getStringExtra("info"))
+                            && Objects.requireNonNull(s.child("image_url").getValue()).toString().equals(getIntent().getStringExtra("image"))) {
 
-                                if (!name.equals("") && !breed.equals("")) {
-                                    DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("users").child(uuid).child("dog_list").child(name);
-                                    df.child("breed").setValue(breed);
-                                    df.child("info").setValue(info);
-                                    df.child("image_url").setValue(image);
-                                    Toast.makeText(EditDogActivity.this, "Edited Successfully", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                    startActivity(new Intent(EditDogActivity.this, ProfileActivity.class));
-                                } else {
-                                    Toast.makeText(EditDogActivity.this, "Invalid Inputs", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-                                break;
+                            if (!name.equals("") && !breed.equals("")) {
+                                DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("users").child(uuid).child("dog_list").child(name);
+                                df.child("breed").setValue(breed);
+                                df.child("info").setValue(info);
+                                df.child("image_url").setValue(image);
+                                Toast.makeText(EditDogActivity.this, "Edited Successfully", Toast.LENGTH_SHORT).show();
+                                finish();
+                                startActivity(new Intent(EditDogActivity.this, ProfileActivity.class));
+                            } else {
+                                Toast.makeText(EditDogActivity.this, "Invalid Inputs", Toast.LENGTH_SHORT).show();
+                                finish();
                             }
                         }
-                    }
+                        }
+
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {

@@ -39,7 +39,7 @@ public class Dog {
         this.name = name;
     }
 
-    String getOwner() {
+    public String getOwner() {
         return owner;
     }
 
@@ -51,11 +51,11 @@ public class Dog {
         this.breed = breed;
     }
 
-    String getInfo() {
+    public String getInfo() {
         return info;
     }
 
-    String getImage_url() {
+    public String getImage_url() {
         return image_url;
     }
 }

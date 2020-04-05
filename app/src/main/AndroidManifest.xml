@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
-        android:fullBackupContent="False"
+        android:fullBackupContent="false"
         android:allowBackup="false">
         <activity android:name=".ParkInfoActivity" />
         <activity android:name=".MainActivity">

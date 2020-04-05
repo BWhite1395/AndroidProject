@@ -97,6 +97,36 @@ public class ParkInfoActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        FirebaseDatabase.getInstance().getReference().child("parks").child(parkAddress).child("dog_list").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                ArrayList<Dog> dog_list = new ArrayList<>();
+
+                for (DataSnapshot s : dataSnapshot.getChildren()) {
+                    dog_list.add(new Dog(Objects.requireNonNull(s.child("name").getValue()).toString(),
+                            Objects.requireNonNull(s.child("owner").getValue()).toString(),
+                            Objects.requireNonNull(s.child("breed").getValue()).toString(),
+                            Objects.requireNonNull(s.child("info").getValue()).toString(),
+                            Objects.requireNonNull(s.child("image_url").getValue()).toString()));
+                }
+
+                // Set the adapter to show the arraylist in the listview.
+                lv = findViewById(R.id.dogListView);
+                lv.setAdapter(new DogAdapterPark(ParkInfoActivity.this, dog_list));
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_park_info, menu);
         optionsMenu = menu;
